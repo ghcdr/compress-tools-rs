@@ -26,7 +26,6 @@ pub enum Kind {
     TarLZMA,
     TarLZip,
     Tar,
-    Zip,
 
     GZip,
     BZip2,
@@ -59,7 +58,6 @@ where
         Kind::TarLZMA => source.lzma().tar(target),
         Kind::TarLZip => source.lzip().tar(target),
         Kind::TarXz => source.xz().tar(target),
-        Kind::Zip => source.unzip(target),
     }
 }
 
@@ -256,13 +254,5 @@ mod test {
         uncompress("test.lzip", &dir_handle.path().join("target"), Kind::LZip)
             .expect("Failed to uncompress file");
         assert_calls(&calls, &["cat test.lzip", "lzip -dc"]);
-    }
-
-    #[test]
-    fn uncompress_zip() {
-        let (dir_handle, calls) = create_echo_bins(&["cat", "unzip"]).unwrap();
-        uncompress("test.zip", &dir_handle.path().join("target"), Kind::Zip)
-            .expect("Failed to uncompress file");
-        assert_calls(&calls, &["cat test.zip", "unzip -X -d"]);
     }
 }
